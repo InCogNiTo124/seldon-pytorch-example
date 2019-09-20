@@ -15,17 +15,17 @@ class Model():
             Normalize(
                 mean=[0.485, 0.456, 0.406],
                 std=[0.229, 0.224, 0.225],
-                #inplace=True
             )
         ])
         return
 
     def predict(self, X, feature_names):
         X = self.img_transform(X.astype(np.uint8)).cuda()
-        X = torch.stack([X] * 128, dim=0)
-        #y_pred = self.model(X.unsqueeze(0))
+        X = torch.stack([X] * 2, dim=0)
         y_pred = self.model(X)
-        softmax = torch.exp(y_pred - torch.max(y_pred, 0).values)
-        softmax /= torch.sum(softmax)
+        y_max = torch.max(y_pred, 1, keepdim=True).values
+        y_pred -= y_max
+        softmax = torch.exp(y_pred - y_max)
+        softmax /= torch.sum(softmax, 1, keepdim=True)
         return softmax.cpu().detach().numpy()
 

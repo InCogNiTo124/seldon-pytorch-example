@@ -10,4 +10,4 @@ sudo make build && sudo docker push msmetko/test_model:latest
 #helm delete --purge test-model && helm install --replace --name test-model deployment/
 #vim sdep*
 kubectl -n seldon create -f sdep*
-sleep 20s && kubectl get pods -n seldon | grep test | cut -d " " -f 1 | xargs -I {} kubectl logs pod/{} classifier -f | grep "predict"
+sleep 20s && kubectl get pods -n seldon | grep test | cut -d " " -f 1 | xargs -I {} kubectl logs pod/{} classifier -f # | grep -i "predict"
