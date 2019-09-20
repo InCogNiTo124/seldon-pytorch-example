@@ -1,0 +1,5 @@
+seldon-core
+pip==19.2.2
+numpy==1.17.0
+torch
+torchvision
