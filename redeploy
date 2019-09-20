@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -e
+kubectl delete -f sdep* || echo "No deployment"
+# sudo docker rm model
+#sudo docker images | grep '<none>' | sed 's/ \+/ /g' | cut -d " " -f 3 | xargs sudo docker image rm
+vim Model.py
+#sudo s2i build $(pwd) seldonio/seldon-core-s2i-python3:0.10 msmetko/test_model:gpu
+sudo make build && sudo docker push msmetko/test_model:latest
+# sudo docker run --name model -p 5000:5000 msmetko/test_model:latest
+#helm delete --purge test-model && helm install --replace --name test-model deployment/
+#vim sdep*
+kubectl -n seldon create -f sdep*
+sleep 20s && kubectl get pods -n seldon | grep test | cut -d " " -f 1 | xargs -I {} kubectl logs pod/{} classifier -f | grep "predict"
